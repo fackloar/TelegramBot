@@ -68,9 +68,9 @@ namespace TelegramBot.API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ChatDTO>> Create([FromBody]ChatDTO chatDTO)
-        {
-            await _chatService.Create(chatDTO);
-            return Ok();
+        { 
+                await _chatService.Create(chatDTO);
+                return Ok();
         }
 
         // DELETE: api/ChatDTOes/5

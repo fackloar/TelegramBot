@@ -84,8 +84,8 @@ namespace TelegramBot.API.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> Create([FromBody]UserDTO userDTO)
         {
-            await _userService.Create(userDTO);
-            return Ok();
+                await _userService.Create(userDTO);
+                return Ok();
         }
 
         // DELETE: api/UserDTOes/5

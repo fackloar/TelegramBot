@@ -17,8 +17,11 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                await _dataContext.AddAsync(entity);
-                await _dataContext.SaveChangesAsync();
+                if (entity != GetById(entity.Id).Result)
+                {
+                    await _dataContext.AddAsync(entity);
+                    await _dataContext.SaveChangesAsync();
+                }
             }
         }
 

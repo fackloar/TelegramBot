@@ -2,8 +2,9 @@
 {
     public static class Commands
     {
-        public static readonly string Start = "/start";
-        public static readonly string Register = "/register";
-        public static readonly string Random = "/random";
+        public const string Start = "/start";
+        public const string Register = "/register";
+        public const string Random = "/random";
+        public const string Id = "/id";
     }
 }

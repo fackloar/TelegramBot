@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 using TelegramBot.DataLayer.Interfaces;
 using TelegramBot.DataLayer.Models;
 
@@ -17,8 +19,15 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                await _dataContext.AddAsync(entity);
-                await _dataContext.SaveChangesAsync();
+                if (!_dataContext.User.Any(u => u.Id == entity.Id))
+                {
+                    await _dataContext.AddAsync(entity);
+                    await _dataContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("This user already exists");
+                }
             }
         }
 
@@ -45,7 +54,7 @@ namespace TelegramBot.DataLayer.Repositories
         {
             var result = await _dataContext.User
                     .Where(user => user.Id == id)
-                    .SingleOrDefaultAsync();
+                    .FirstOrDefaultAsync();
             if (result != null)
             {
                 return result;
