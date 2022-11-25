@@ -1,4 +1,6 @@
 ﻿using ActualBot.BotAPI;
+using Quartz.Impl;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,7 +70,7 @@ namespace ActualBot
 
 
             Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
-
+            
             switch (message.Text)
             {
                 case Commands.Start:
@@ -91,9 +93,16 @@ namespace ActualBot
                 case Commands.Id:
                     commandOperator.Id(sender.Id);
                     break;
-
+                case Commands.SecretSanta:
+                    commandOperator.SecretSanta();
+                    break;
             }
 
+            /*var periodicTime = new PeriodicTimer(TimeSpan.FromSeconds(10));
+            while (await periodicTime.WaitForNextTickAsync())
+            {
+                await commandOperator.OfTheDay();
+            }*/
         }
 
         private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)

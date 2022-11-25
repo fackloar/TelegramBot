@@ -40,7 +40,9 @@ namespace ActualBot.BotAPI
                 return userDTO;
             }
             else
+            {
                 return null;
+            }
         }
 
         public async Task<HttpResponseMessage> CreateChatAsync(ChatDTO chat)
@@ -54,8 +56,16 @@ namespace ActualBot.BotAPI
         public async Task<ChatDTO> GetChatByIdAsync(long id)
         {
             var response = await _httpClient.GetAsync($"{_baseUrl}/Chat/id/{id}");
-            ChatDTO chatDTO = JsonConvert.DeserializeObject<ChatDTO>(response.Content.ToString());
-            return chatDTO;
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                ChatDTO chatDTO = JsonConvert.DeserializeObject<ChatDTO>(content);
+                return chatDTO;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

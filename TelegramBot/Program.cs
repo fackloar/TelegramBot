@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Telegram.Bot;
 using TelegramBot.DataLayer;
 using TelegramBot.DataLayer.Interfaces;
 using TelegramBot.DataLayer.Repositories;
@@ -15,7 +14,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 // Add services
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddTransient<IUserDBRepository, UserDBRepository>();

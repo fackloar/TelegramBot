@@ -3,6 +3,8 @@ using Telegram.Bot;
 using System.Threading;
 using ActualBot.Models;
 using ActualBot.BotAPI;
+using System.Runtime.InteropServices;
+using Telegram.Bot.Types.Enums;
 
 namespace TelegramBot.Bot
 {
@@ -61,10 +63,22 @@ namespace TelegramBot.Bot
             Random random = new Random();
             var users = await _botApi.GetUsersOfChatAsync(_chatId);
             var choice = random.Next(0, users.Count());
-            Message sentMessage = await _botClient.SendTextMessageAsync(
-            chatId: _chatId,
-            text: $"Random user today: @{users[choice].Username}",
-            cancellationToken: _cts);
+            var chosenUser = users[choice];
+            var name = UsernameOrFirstname(chosenUser);
+            if (chosenUser.Username != null)
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: $"Random user today: @{name}",
+                cancellationToken: _cts);
+            }
+            else if(chosenUser.FirstName != null)
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: $"Random user today: {name}",
+                cancellationToken: _cts);
+            }
         }
 
         public async void Id(long id)
@@ -76,6 +90,86 @@ namespace TelegramBot.Bot
                 chatId: _chatId,
                 text: $"Your Id is {user.Id}",
                 cancellationToken: _cts);
+            }
+        }
+
+        public async void SecretSanta()
+        {
+            var santas = await _botApi.GetUsersOfChatAsync(_chatId);
+            var usersToGift = await _botApi.GetUsersOfChatAsync(_chatId);
+            Random random = new Random();
+            foreach (UserDTO santa in santas)
+            {
+                List<int> possibleChoices = new List<int>();
+                for (int i = 0; i < usersToGift.Count; i++)
+                {
+                    if (usersToGift[i].Id != santa.Id)
+                    {
+                        possibleChoices.Add(i);
+                    }
+                }
+                var choice = possibleChoices[random.Next(0, possibleChoices.Count)];
+
+                var userToGift = usersToGift[choice];
+
+                var name = UsernameOrFirstname(userToGift);
+
+                if (CheckIfUserHasAPrivateChatWithBot(santa.Id).Result == true)
+                {
+                    Message stickerMessage = await _botClient.SendStickerAsync(
+                    chatId: santa.Id,
+                    sticker: "CAACAgIAAxkBAAEaT7tjf-2UlQR748jqPTARgQABpHXVwKgAAmYSAAIrEOhJ3To7U-US8LYrBA",
+                    cancellationToken: _cts);
+
+                    Message sentMessage = await _botClient.SendTextMessageAsync(
+                    chatId: santa.Id,
+                    text: $"Hi! You give a gift to {name}",
+                    cancellationToken: _cts);
+                    usersToGift.Remove(userToGift);
+                }
+            }
+        }
+
+        public async Task OfTheDay()
+        {
+            Random random = new Random();
+            var users = await _botApi.GetUsersOfChatAsync(_chatId);
+            var choice = random.Next(0, users.Count());
+            var chosenUser = users[choice];
+            var name = UsernameOrFirstname(chosenUser);
+            if (chosenUser.Username != null)
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: $"Киса дня: {name}",
+                cancellationToken: _cts);
+            }
+            else if (chosenUser.FirstName != null)
+            {
+                Message sentMessage = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: $"Киса дня: {name}",
+                cancellationToken: _cts);
+            }
+        }
+
+        private async Task<bool> CheckIfUserHasAPrivateChatWithBot(long userId)
+        {
+            var chat = await _botApi.GetChatByIdAsync(userId);
+            if (chat == null)
+                return false;
+            else return true;
+        }
+
+        private string UsernameOrFirstname(UserDTO user)
+        {
+            if (user.Username == null)
+            {
+                return user.FirstName;
+            }
+            else
+            {
+                return $"@{user.Username}";
             }
         }
     }

@@ -6,5 +6,6 @@
         public const string Register = "/register";
         public const string Random = "/random";
         public const string Id = "/id";
+        public const string SecretSanta = "/secretSanta";
     }
 }

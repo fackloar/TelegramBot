@@ -19,7 +19,7 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                if (!_dataContext.User.Any(u => u.Id == entity.Id))
+                if (!_dataContext.ChatUser.Any(u => u.Id == entity.Id))
                 {
                     await _dataContext.AddAsync(entity);
                     await _dataContext.SaveChangesAsync();
@@ -35,7 +35,7 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                var userToDelete = _dataContext.User.Find(id);
+                var userToDelete = _dataContext.ChatUser.Find(id);
 
                 if (userToDelete != null)
                 {
@@ -47,12 +47,12 @@ namespace TelegramBot.DataLayer.Repositories
 
         public async Task<IList<UserDB>> GetAll()
         {
-            return await _dataContext.User.OrderBy(dc => dc.Id).ToListAsync();
+            return await _dataContext.ChatUser.OrderBy(dc => dc.Id).ToListAsync();
         }
 
         public async Task<UserDB> GetById(long id)
         {
-            var result = await _dataContext.User
+            var result = await _dataContext.ChatUser
                     .Where(user => user.Id == id)
                     .FirstOrDefaultAsync();
             if (result != null)
@@ -67,7 +67,7 @@ namespace TelegramBot.DataLayer.Repositories
 
         public async Task<IList<UserDB>> GetByName(string username)
         {
-            var result = await _dataContext.User
+            var result = await _dataContext.ChatUser
                     .Where(user => user.Username == username)
                     .ToListAsync();
             if (result != null)
@@ -84,7 +84,7 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                var userToChange = _dataContext.User.Find(id);
+                var userToChange = _dataContext.ChatUser.Find(id);
                 if (userToChange != null)
                 {
                     userToChange.Id = entity.Id;
@@ -100,7 +100,7 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                var result = await _dataContext.User
+                var result = await _dataContext.ChatUser
                         .Where(users => users.ChatId == chatId)
                         .ToListAsync();
                 if (result != null)

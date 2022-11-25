@@ -17,10 +17,14 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                if (entity != GetById(entity.Id).Result)
+                if (!_dataContext.Chat.Any(u => u.Id == entity.Id))
                 {
                     await _dataContext.AddAsync(entity);
                     await _dataContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("This chat already exists");
                 }
             }
         }

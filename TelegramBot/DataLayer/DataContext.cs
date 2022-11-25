@@ -11,7 +11,7 @@ namespace TelegramBot.DataLayer
 
         }
 
-        public DbSet<UserDB> User { get; set; }
+        public DbSet<UserDB> ChatUser { get; set; }
         public DbSet<ChatDB> Chat { get; set; }
     }
 }
