@@ -5,7 +5,8 @@ using Quartz;
 using Telegram.Bot;
 
 var botApi = new BotAPI();
-var botClient = new TelegramBotClient("5944999248:AAFO45MEAB0uLCMAjpZAExwxY7MMpy8vBrg");
+var token = File.ReadAllText("token.txt");
+var botClient = new TelegramBotClient(token);
 
 // Create a bot
 

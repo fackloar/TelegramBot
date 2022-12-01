@@ -1,18 +1,13 @@
 ﻿using ActualBot.BotAPI;
 using Quartz.Impl;
 using Quartz;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TelegramBot.Bot;
+using ActualBot.Info;
 
 namespace ActualBot
 {
@@ -20,6 +15,7 @@ namespace ActualBot
     {
         private readonly TelegramBotClient _botClient;
         private static IBotAPI? _botAPI;
+        private bool gameOn { get; set; } = false;
 
         public BotEngine(TelegramBotClient botClient, IBotAPI botAPI)
         {
@@ -74,6 +70,7 @@ namespace ActualBot
             switch (message.Text)
             {
                 case Commands.Start:
+                case Commands.StartAt:
                     var response = await commandOperator.StartAsync();
                     if (response.IsSuccessStatusCode)
                     {
@@ -81,28 +78,37 @@ namespace ActualBot
                     }
                     break;
                 case Commands.Register:
+                case Commands.RegisterAt:
                     var registerResponse = await commandOperator.Register();
                     if (registerResponse.IsSuccessStatusCode)
                     {
                         Console.WriteLine($"Created a user {message.From.Username} from the chat {message.Chat.Title} in the database");
                     }
                     break;
-                case Commands.Random:
-                    commandOperator.Random();
-                    break;
-                case Commands.Id:
-                    commandOperator.Id(sender.Id);
-                    break;
                 case Commands.SecretSanta:
+                case Commands.SecretSantaAt:
                     commandOperator.SecretSanta();
                     break;
+                case Commands.GameOn:
+                case Commands.GameOnAt:
+                    if (gameOn == false)
+                    {
+                        await CreateAndStartAJob(commandOperator);
+                    }
+                    else
+                    {
+                        commandOperator.AlreadyOn();
+                    }
+                    break;
+                case Commands.Winner:
+                case Commands.WinnerAt:
+                    commandOperator.WinnerCheck();
+                    break;
+                case Commands.Help:
+                case Commands.HelpAt:
+                    commandOperator.Help();
+                    break;
             }
-
-            /*var periodicTime = new PeriodicTimer(TimeSpan.FromSeconds(10));
-            while (await periodicTime.WaitForNextTickAsync())
-            {
-                await commandOperator.OfTheDay();
-            }*/
         }
 
         private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
@@ -116,6 +122,36 @@ namespace ActualBot
 
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
+        }
+
+        private async Task CreateAndStartAJob(CommandOperator commandOperator)
+        {
+            gameOn = true;
+            StdSchedulerFactory factory = new StdSchedulerFactory();
+            IScheduler scheduler = await factory.GetScheduler();
+
+            await scheduler.Start();
+
+            IJobDetail job = JobBuilder.Create<ScheduleJob>()
+                .WithIdentity("job1", "group1")
+                .Build();
+
+            job.JobDataMap.Put("commandOperator", commandOperator);
+
+            ITrigger trigger = TriggerBuilder.Create()
+                .WithIdentity("trigger1", "group1")
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInHours(24)
+                    .RepeatForever())
+                .Build();
+
+            if (await scheduler.CheckExists(job.Key))
+            {
+                await scheduler.DeleteJob(job.Key);
+            }
+
+            await scheduler.ScheduleJob(job, trigger);
         }
     }
 }

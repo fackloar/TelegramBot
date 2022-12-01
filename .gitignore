@@ -398,3 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 info.txt
+ActualBot/BotAPI/connectionString.txt
+ActualBot/token.txt

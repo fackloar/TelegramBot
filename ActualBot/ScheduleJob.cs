@@ -8,18 +8,16 @@ using TelegramBot.Bot;
 
 namespace ActualBot
 {
-    internal class ScheduleJob : IJob
+    public class ScheduleJob : IJob
     {
-        private CommandOperator _commandOperator;
-
-        public ScheduleJob(CommandOperator commandOperator)
-        {
-            _commandOperator = commandOperator;
-        }
-
         public async Task Execute(IJobExecutionContext context)
         {
-            await _commandOperator.OfTheDay();
+            var dataMap = context.MergedJobDataMap;
+
+            var commandOperator = (CommandOperator)dataMap["commandOperator"];
+
+            await commandOperator.EverydayJob();
+
         }
     }
 }

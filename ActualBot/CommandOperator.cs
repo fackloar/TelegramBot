@@ -1,10 +1,8 @@
 ﻿using Telegram.Bot.Types;
 using Telegram.Bot;
-using System.Threading;
 using ActualBot.Models;
 using ActualBot.BotAPI;
-using System.Runtime.InteropServices;
-using Telegram.Bot.Types.Enums;
+using ActualBot.Info;
 
 namespace TelegramBot.Bot
 {
@@ -29,8 +27,8 @@ namespace TelegramBot.Bot
         {
             Message sentMessage = await _botClient.SendTextMessageAsync(
             chatId: _chatId,
-            text: $"Hello!",
-            cancellationToken: _cts);
+            text: Messages.Hello,
+            cancellationToken: _cts) ;
             ChatDTO chat = new ChatDTO()
             {
                 Id = _chatId,
@@ -44,7 +42,7 @@ namespace TelegramBot.Bot
         {
             Message sentMessage = await _botClient.SendTextMessageAsync(
             chatId: _chatId,
-            text: $"Hello!!!",
+            text: Messages.Registered,
             cancellationToken: _cts);
 
             UserDTO user = new UserDTO()
@@ -56,41 +54,6 @@ namespace TelegramBot.Bot
             };
 
             return await _botApi.CreateUserAsync(user);
-        }
-
-        public async void Random()
-        {
-            Random random = new Random();
-            var users = await _botApi.GetUsersOfChatAsync(_chatId);
-            var choice = random.Next(0, users.Count());
-            var chosenUser = users[choice];
-            var name = UsernameOrFirstname(chosenUser);
-            if (chosenUser.Username != null)
-            {
-                Message sentMessage = await _botClient.SendTextMessageAsync(
-                chatId: _chatId,
-                text: $"Random user today: @{name}",
-                cancellationToken: _cts);
-            }
-            else if(chosenUser.FirstName != null)
-            {
-                Message sentMessage = await _botClient.SendTextMessageAsync(
-                chatId: _chatId,
-                text: $"Random user today: {name}",
-                cancellationToken: _cts);
-            }
-        }
-
-        public async void Id(long id)
-        {
-            var user = await _botApi.GetUserByIdAsync(id);
-            if (user != null)
-            {
-                Message sentMessage = await _botClient.SendTextMessageAsync(
-                chatId: _chatId,
-                text: $"Your Id is {user.Id}",
-                cancellationToken: _cts);
-            }
         }
 
         public async void SecretSanta()
@@ -118,39 +81,70 @@ namespace TelegramBot.Bot
                 {
                     Message stickerMessage = await _botClient.SendStickerAsync(
                     chatId: santa.Id,
-                    sticker: "CAACAgIAAxkBAAEaT7tjf-2UlQR748jqPTARgQABpHXVwKgAAmYSAAIrEOhJ3To7U-US8LYrBA",
+                    sticker: Messages.SecretSantaSticker,
                     cancellationToken: _cts);
 
                     Message sentMessage = await _botClient.SendTextMessageAsync(
                     chatId: santa.Id,
-                    text: $"Hi! You give a gift to {name}",
+                    text: $"Привет! Ты даришь подарок {name}. Постарайся порадовать своего друга! :3",
                     cancellationToken: _cts);
                     usersToGift.Remove(userToGift);
                 }
             }
         }
 
-        public async Task OfTheDay()
+        private async Task OfTheDay()
         {
             Random random = new Random();
             var users = await _botApi.GetUsersOfChatAsync(_chatId);
             var choice = random.Next(0, users.Count());
             var chosenUser = users[choice];
             var name = UsernameOrFirstname(chosenUser);
-            if (chosenUser.Username != null)
-            {
-                Message sentMessage = await _botClient.SendTextMessageAsync(
+            Messages.Winner = $"Котик дня: {name}";
+
+            Message sticker = await _botClient.SendStickerAsync(
                 chatId: _chatId,
-                text: $"Киса дня: {name}",
+                sticker: Messages.OfTheDaySticker,
+                cancellationToken: _cts);
+
+            Message winner = await _botClient.SendTextMessageAsync(
+            chatId: _chatId,
+            text: Messages.Winner,
+            cancellationToken: _cts);
+        }
+
+        public async void WinnerCheck()
+        {
+            if (Messages.Winner == null)
+            {
+                Message noWinner = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: Messages.GamesOff,
                 cancellationToken: _cts);
             }
-            else if (chosenUser.FirstName != null)
+            else
             {
-                Message sentMessage = await _botClient.SendTextMessageAsync(
+                Message repeatWinner = await _botClient.SendTextMessageAsync(
                 chatId: _chatId,
-                text: $"Киса дня: {name}",
+                text: Messages.Winner,
                 cancellationToken: _cts);
             }
+        }
+
+        public async void AlreadyOn()
+        {
+            Message alreadyOn = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: Messages.AlreadyOn,
+                cancellationToken: _cts);
+        }
+
+        public async void Help()
+        {
+            Message helpMessage = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: Messages.Help,
+                cancellationToken: _cts);
         }
 
         private async Task<bool> CheckIfUserHasAPrivateChatWithBot(long userId)
@@ -171,6 +165,11 @@ namespace TelegramBot.Bot
             {
                 return $"@{user.Username}";
             }
+        }
+
+        public async Task EverydayJob()
+        {
+            await OfTheDay();
         }
     }
 }

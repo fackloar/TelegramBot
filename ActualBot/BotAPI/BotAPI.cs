@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using File = System.IO.File;
 
 namespace ActualBot.BotAPI
 {
     public class BotAPI : IBotAPI
     {
         private static HttpClient _httpClient = new();
-        private static readonly string _baseUrl = "https://localhost:7142/api";
+        private static readonly string _baseUrl = File.ReadAllText("connectionString.txt");
 
         public async Task<HttpResponseMessage> CreateUserAsync(UserDTO user)
         {
