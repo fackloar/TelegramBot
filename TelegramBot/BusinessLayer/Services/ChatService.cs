@@ -6,12 +6,12 @@ using TelegramBot.DataLayer.Models;
 
 namespace TelegramBot.BusinessLayer.Services
 {
-    public class ChatService : IService<ChatDTO>
+    public class ChatService : IChatService
     {
-        private IRepository<ChatDB> _repository;
+        private IChatDBRepository _repository;
         private IMapper _mapper;
 
-        public ChatService(IRepository<ChatDB> repository, IMapper mapper)
+        public ChatService(IChatDBRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

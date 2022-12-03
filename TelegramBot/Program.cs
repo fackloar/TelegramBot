@@ -18,9 +18,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.AddTransient<IUserDBRepository, UserDBRepository>();
-builder.Services.AddTransient<IRepository<ChatDB>, ChatDBRepository>();
+builder.Services.AddTransient<IChatDBRepository, ChatDBRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IService<ChatDTO>, ChatService>();
+builder.Services.AddTransient<IChatService, ChatService>();
 builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

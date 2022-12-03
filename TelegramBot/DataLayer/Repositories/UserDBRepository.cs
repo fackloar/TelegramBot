@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Runtime.CompilerServices;
 using TelegramBot.DataLayer.Interfaces;
 using TelegramBot.DataLayer.Models;
 
@@ -19,7 +20,10 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                if (!_dataContext.ChatUser.Any(u => u.Id == entity.Id))
+                UserDB tryFind = await _dataContext.ChatUser.Where(user => user.TelegramId == entity.TelegramId)
+                    .Where(user => user.ChatId == entity.ChatId).FirstOrDefaultAsync();
+
+                if (tryFind == null)
                 {
                     await _dataContext.AddAsync(entity);
                     await _dataContext.SaveChangesAsync();
@@ -27,11 +31,13 @@ namespace TelegramBot.DataLayer.Repositories
                 else
                 {
                     throw new Exception("This user already exists");
+                    
                 }
+
             }
         }
 
-        public async Task Delete(long id)
+        public async Task Delete(int id)
         {
             using (_dataContext)
             {
@@ -50,11 +56,11 @@ namespace TelegramBot.DataLayer.Repositories
             return await _dataContext.ChatUser.OrderBy(dc => dc.Id).ToListAsync();
         }
 
-        public async Task<UserDB> GetById(long id)
+        public async Task<IList<UserDB>> GetByTelegramId(long telegramId)
         {
             var result = await _dataContext.ChatUser
-                    .Where(user => user.Id == id)
-                    .FirstOrDefaultAsync();
+                    .Where(user => user.Id == telegramId)
+                    .ToListAsync();
             if (result != null)
             {
                 return result;
@@ -80,7 +86,7 @@ namespace TelegramBot.DataLayer.Repositories
             }
         }
 
-        public async Task Update(long id, UserDB entity)
+        public async Task Update(int id, UserDB entity)
         {
             using (_dataContext)
             {
@@ -90,6 +96,9 @@ namespace TelegramBot.DataLayer.Repositories
                     userToChange.Id = entity.Id;
                     userToChange.Username = entity.Username;
                     userToChange.FirstName = entity.FirstName;
+                    userToChange.WinsNumber = entity.WinsNumber;
+                    userToChange.Karma = entity.Karma;
+                    userToChange.KarmaSwitch = entity.KarmaSwitch;
                 }
                 _dataContext.Update(userToChange);
                 await _dataContext.SaveChangesAsync();
@@ -111,6 +120,74 @@ namespace TelegramBot.DataLayer.Repositories
                 {
                     throw new Exception("No users in this chat");
                 }
+            }
+        }
+
+        public async Task<UserDB> GetByIdWithChat(long chatId, long telegramId)
+        {
+            using (_dataContext)
+            {
+                var result = await _dataContext.ChatUser
+                    .Where(user => user.TelegramId == telegramId && user.ChatId == chatId)
+                    .FirstOrDefaultAsync();
+
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new Exception("No user with this ID");
+                }
+            }
+        }
+
+        public async Task<IList<UserDB>> GetTopWinners(long chatId)
+        {
+            using (_dataContext)
+            {
+                var result = await _dataContext.ChatUser
+                    .Where(user => user.ChatId == chatId)
+                    .OrderBy(order => order.WinsNumber)
+                    .ToListAsync();
+
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new Exception("No user with this ID");
+                }
+            }
+        }
+
+        public async Task<IList<UserDB>> GetTopKarma(long chatId)
+        {
+            using (_dataContext)
+            {
+                var result = await _dataContext.ChatUser
+                    .Where(user => user.ChatId == chatId)
+                    .OrderBy(order => order.Karma)
+                    .ToListAsync();
+
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new Exception("No user with this ID");
+                }
+            }
+        }
+
+        public async Task<UserDB> GetById(int id)
+        {
+            using (_dataContext)
+            {
+                var result = await _dataContext.ChatUser.FindAsync(id);
+                return result;
             }
         }
     }

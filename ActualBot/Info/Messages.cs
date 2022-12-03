@@ -14,11 +14,19 @@ namespace ActualBot.Info
         public const string Help = "Привет! Чтобы зарегистрироваться в игре, напиши /register.\n" +
                                 "Когда все желающие пройдут регистрацию, можно запустить игру набрав /gameOn\n" +
                                 "Чтобы я напомнил, кто сегодня победил - /winner\n" +
-                                "Для того, чтобы вы сыграли в секретного Санту, и я выбрал, кто кому должен будет что-то подарить - /secretSanta\n" +
-                                "ВНИМАНИЕ: Чтобы я правильно распределил секретных Сант, каждый участник должен написать мне в лс /start! Иначе не сработает:(";
+                                "Также я умею считать карму. По умолчанию счетчик кармы у каждого выключен\n" +
+                                "Чтобы включить счетчик, напиши /karmaSwitch\n" +
+                                "Для того, чтобы поднять карму человеку, ответь на его сообщение +\n" +
+                                "Для того, чтобы понизить карму, ответь на его сообщение -\n" +
+                                "Если ты вдруг захочешь выключить свой счетчик, ты можешь это сделать. Просто напиши /karmaSwitch ещё раз\n" +
+                                "Учти, что в таком случае, если у тебя была положительная карма, то она обнулится. А если отрицательная, то останется как есть.\n";
         public const string GamesOff = "Никто не выиграет, пока не начнёте играть... Для запуска игры напишите /gameOn";
         public const string SecretSantaSticker = "CAACAgIAAxkBAAEaT7tjf-2UlQR748jqPTARgQABpHXVwKgAAmYSAAIrEOhJ3To7U-US8LYrBA";
         public const string OfTheDaySticker = "CAACAgIAAxkBAAEGoTZjh_nzdC3bVYIfg5avIB8ghx70IwACNxUAAneYoUuKCzy_q8x4eCsE";
-        public static string? Winner { get; set; }
+        public const string DontCheat = "Извини, но самому себе карму поменять не получится.";
+        public const string NoChat = "Похоже, я еще не запомнил ваш чат. Напишите /start.";
+        public const string NoUser = "Похоже, я еще не запомнил такого пользователя. Напиши /register.";
+        public const string Error = "Что-то тут не так...";
+        public const string KarmaOff = "У этого пользователя выключен счетчик кармы ;)";
     }
 }

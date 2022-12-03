@@ -23,7 +23,7 @@ namespace TelegramBot.BusinessLayer.Services
             await _repository.Create(userToCreate);
         }
 
-        public async Task Delete(long id)
+        public async Task Delete(int id)
         {
             await _repository.Delete(id);
         }
@@ -40,13 +40,6 @@ namespace TelegramBot.BusinessLayer.Services
             return userDTOs;
         }
 
-        public async Task<UserDTO> GetById(long id)
-        {
-            var userGot = await _repository.GetById(id);
-            var userDTO = _mapper.Map<UserDTO>(userGot);
-            return userDTO;
-        }
-
         public async Task<IList<UserDTO>> GetByName(string name)
         {
             var users = await _repository.GetByName(name);
@@ -59,7 +52,7 @@ namespace TelegramBot.BusinessLayer.Services
             return userDTOs;
         }
 
-        public async Task Update(long id, UserDTO entity)
+        public async Task Update(int id, UserDTO entity)
         {
             var updatedUser = _mapper.Map<UserDB>(entity);
             await _repository.Update(id, updatedUser);
@@ -75,6 +68,56 @@ namespace TelegramBot.BusinessLayer.Services
                 userDTOs.Add(convertedUser);
             }
             return userDTOs;
+        }
+
+        public async Task<UserDTO> GetByIdWithChat(long chatId, long userId)
+        {
+            var userGot = await _repository.GetByIdWithChat(chatId, userId);
+            var userDto = _mapper.Map<UserDTO>(userGot);
+            return userDto;
+        }
+
+        public async Task<IList<UserDTO>> GetByTelegramId(long id)
+        {
+            var users = await _repository.GetByTelegramId(id);
+            List<UserDTO> userDTOs = new List<UserDTO>();
+            foreach (UserDB userDB in users)
+            {
+                UserDTO convertedUser = _mapper.Map<UserDTO>(userDB);
+                userDTOs.Add(convertedUser);
+            }
+            return userDTOs;
+        }
+
+        public async Task<IList<UserDTO>> GetTopWinners(long chatId)
+        {
+            var winners = await _repository.GetTopWinners(chatId);
+            List<UserDTO> userDTOs = new List<UserDTO>();
+            foreach (UserDB userDB in winners)
+            {
+                UserDTO convertedUser = _mapper.Map<UserDTO>(userDB);
+                userDTOs.Add(convertedUser);
+            }
+            return userDTOs;
+        }
+
+        public async Task<IList<UserDTO>> GetTopKarma(long chatId)
+        {
+            var winners = await _repository.GetTopKarma(chatId);
+            List<UserDTO> userDTOs = new List<UserDTO>();
+            foreach (UserDB userDB in winners)
+            {
+                UserDTO convertedUser = _mapper.Map<UserDTO>(userDB);
+                userDTOs.Add(convertedUser);
+            }
+            return userDTOs;
+        }
+
+        public async Task<UserDTO> GetById(int id)
+        {
+            var result = await _repository.GetById(id);
+            var user = _mapper.Map<UserDTO>(result);
+            return user;
         }
     }
 }

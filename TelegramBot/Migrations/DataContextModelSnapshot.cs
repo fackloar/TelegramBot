@@ -22,10 +22,16 @@ namespace TelegramBotAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("GameOnSwitch")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Winner")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -35,7 +41,7 @@ namespace TelegramBotAPI.Migrations
 
             modelBuilder.Entity("TelegramBot.DataLayer.Models.UserDB", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -45,8 +51,20 @@ namespace TelegramBotAPI.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Karma")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("KarmaSwitch")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("TelegramId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("WinsNumber")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

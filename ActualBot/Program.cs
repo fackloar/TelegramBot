@@ -9,7 +9,9 @@ var token = File.ReadAllText("token.txt");
 var botClient = new TelegramBotClient(token);
 
 // Create a bot
+StdSchedulerFactory factory = new StdSchedulerFactory();
+IScheduler scheduler = await factory.GetScheduler();
 
-var chatBot = new BotEngine(botClient, botApi);
+var chatBot = new BotEngine(botClient, botApi, scheduler);
 
 await chatBot.ListenForMessagesAsync();

@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TelegramBot.DataLayer.Interfaces;
 using TelegramBot.DataLayer.Models;
 
 namespace TelegramBot.DataLayer.Repositories
 {
-    public class ChatDBRepository : IRepository<ChatDB>
+    public class ChatDBRepository : IChatDBRepository
     {
         DataContext _dataContext;
 
@@ -17,7 +18,7 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                if (!_dataContext.Chat.Any(u => u.Id == entity.Id))
+                if (!_dataContext.Chat.Any(c => c.Id == entity.Id))
                 {
                     await _dataContext.AddAsync(entity);
                     await _dataContext.SaveChangesAsync();
@@ -45,7 +46,7 @@ namespace TelegramBot.DataLayer.Repositories
 
         public async Task<IList<ChatDB>> GetAll()
         {
-            return await _dataContext.Chat.OrderBy(dc => dc.Id).ToListAsync();
+            return await _dataContext.Chat.OrderBy(c => c.Id).ToListAsync();
         }
 
         public async Task<ChatDB> GetById(long id)
@@ -82,14 +83,17 @@ namespace TelegramBot.DataLayer.Repositories
         {
             using (_dataContext)
             {
-                var chatToChange = _dataContext.Chat.Find(id);
+                var chatToChange = await _dataContext.Chat.FirstOrDefaultAsync(chat => chat.Id == id);
                 if (chatToChange != null)
                 {
                     chatToChange.Id = entity.Id;
                     chatToChange.Title = entity.Title;
                     chatToChange.Type = entity.Type;
+                    chatToChange.Winner = entity.Winner;
+                    chatToChange.GameOnSwitch = entity.GameOnSwitch;
                 }
                 _dataContext.Update(chatToChange);
+
                 await _dataContext.SaveChangesAsync();
             }
         }

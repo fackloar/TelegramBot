@@ -31,13 +31,28 @@ namespace ActualBot.BotAPI
             return userDTOs;
         }
 
-        public async Task<UserDTO> GetUserByIdAsync(long id)
+        public async Task<UserDTO> GetUserOfChatAsync(long chatId, long userId)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/User/id/{id}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/User/{chatId}/{userId}");
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
                 UserDTO userDTO = JsonConvert.DeserializeObject<UserDTO>(content);
+                return userDTO;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<UserDTO>> GetUserByIdAsync(long id)
+        {
+            var response = await _httpClient.GetAsync($"{_baseUrl}/User/telegram/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<UserDTO> userDTO = JsonConvert.DeserializeObject<List<UserDTO>>(content);
                 return userDTO;
             }
             else
@@ -62,6 +77,51 @@ namespace ActualBot.BotAPI
             {
                 ChatDTO chatDTO = JsonConvert.DeserializeObject<ChatDTO>(content);
                 return chatDTO;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<HttpResponseMessage> UpdateUser(int id, UserDTO user)
+        {
+            var json = JsonConvert.SerializeObject(user);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{_baseUrl}/User/{id}", stringContent);
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> UpdateChat(long id, ChatDTO chat)
+        {
+            var json = JsonConvert.SerializeObject(chat);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{_baseUrl}/Chat/{id}", stringContent);
+            return response;
+        }
+
+        public async Task<List<UserDTO>> GetTopWinners(long chatId)
+        {
+            var response = await _httpClient.GetAsync($"{_baseUrl}/User/{chatId}/topWinners");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<UserDTO> userDTO = JsonConvert.DeserializeObject<List<UserDTO>>(content);
+                return userDTO;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public async Task<List<UserDTO>> GetTopKarma(long chatId)
+        {
+            var response = await _httpClient.GetAsync($"{_baseUrl}/User/{chatId}/topKarma");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<UserDTO> userDTO = JsonConvert.DeserializeObject<List<UserDTO>>(content);
+                return userDTO;
             }
             else
             {

@@ -12,10 +12,13 @@ namespace ActualBot.BotAPI
     {
         Task<HttpResponseMessage> CreateUserAsync(UserDTO user);
         Task<List<UserDTO>> GetUsersOfChatAsync(long chatId);
-        Task<UserDTO> GetUserByIdAsync(long id);
+        Task<List<UserDTO>> GetUserByIdAsync(long id);
         Task<HttpResponseMessage> CreateChatAsync(ChatDTO chat);
         Task<ChatDTO> GetChatByIdAsync(long id);
-
-
+        Task<HttpResponseMessage> UpdateUser(int id, UserDTO user);
+        Task<HttpResponseMessage> UpdateChat(long id, ChatDTO chat);
+        Task<UserDTO> GetUserOfChatAsync(long chatId, long userId);
+        Task<List<UserDTO>> GetTopWinners(long chatId);
+        Task<List<UserDTO>> GetTopKarma(long chatId);
     }
 }

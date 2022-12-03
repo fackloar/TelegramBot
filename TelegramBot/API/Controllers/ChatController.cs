@@ -16,14 +16,13 @@ namespace TelegramBot.API.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        private IService<ChatDTO> _chatService;
+        private IChatService _chatService;
 
-        public ChatController(IService<ChatDTO> chatService)
+        public ChatController(IChatService chatService)
         {
             _chatService = chatService;
         }
 
-        // GET: api/ChatDTOes
         [HttpGet]
         public async Task<ActionResult<IList<ChatDTO>>> GetAll()
         {
@@ -40,7 +39,6 @@ namespace TelegramBot.API.Controllers
 
         }
 
-        // GET: api/ChatDTOes/5
         [HttpGet("id/{id}")]
         public async Task<ActionResult<ChatDTO>> GetChatById(long id)
         {
@@ -55,22 +53,18 @@ namespace TelegramBot.API.Controllers
             return Ok(response);
         }
 
-        // PUT: api/ChatDTOes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute]long id, [FromBody] ChatDTO chatDTO)
+        public async Task<IActionResult> Update([FromRoute] long id, [FromBody] ChatDTO chatDTO)
         {
             await _chatService.Update(id, chatDTO);
             return Ok();
         }
 
-        // POST: api/ChatDTOes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ChatDTO>> Create([FromBody]ChatDTO chatDTO)
-        { 
-                await _chatService.Create(chatDTO);
-                return Ok();
+        public async Task<ActionResult<ChatDTO>> Create([FromBody] ChatDTO chatDTO)
+        {
+            await _chatService.Create(chatDTO);
+            return Ok();
         }
 
         // DELETE: api/ChatDTOes/5
