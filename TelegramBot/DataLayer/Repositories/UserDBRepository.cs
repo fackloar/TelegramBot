@@ -31,7 +31,7 @@ namespace TelegramBot.DataLayer.Repositories
                 else
                 {
                     throw new Exception("This user already exists");
-                    
+                 
                 }
 
             }

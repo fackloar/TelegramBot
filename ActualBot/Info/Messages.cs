@@ -10,6 +10,7 @@ namespace ActualBot.Info
     {
         public const string Hello = "Привет! Чтобы увидеть список команд, введи /help.";
         public const string Registered = "Отлично! Ты зарегестрирован в игре \"Котик дня\"";
+        public const string NotRegistered = "Что-то тут неладное... Похоже, ты уже регистрировался.";
         public const string AlreadyOn = "Ой! Игра уже включена...";
         public const string Help = "Привет! Чтобы зарегистрироваться в игре, напиши /register.\n" +
                                 "Когда все желающие пройдут регистрацию, можно запустить игру набрав /gameOn\n" +
