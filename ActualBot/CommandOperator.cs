@@ -43,11 +43,6 @@ namespace TelegramBot.Bot
 
         public async Task<HttpResponseMessage> Register()
         {
-            Message sentMessage = await _botClient.SendTextMessageAsync(
-            chatId: _chatId,
-            text: Messages.Registered,
-            cancellationToken: _cts);
-
             UserDTO user = new UserDTO()
             {
                 TelegramId = _sender.Id,
@@ -56,7 +51,22 @@ namespace TelegramBot.Bot
                 Username = _sender.Username,
             };
 
-            return await _botApi.CreateUserAsync(user);
+            var registeredResponse = await _botApi.CreateUserAsync(user);
+            if (registeredResponse.IsSuccessStatusCode)
+            {
+                Message registeredMessage = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: Messages.Registered,
+                cancellationToken: _cts);
+            }
+            else
+            {
+                Message notRegisteredMessage = await _botClient.SendTextMessageAsync(
+                    chatId: _chatId,
+                    text: Messages.NotRegistered,
+                    cancellationToken: _cts);
+            }
+            return registeredResponse;
         }
 
         private async Task OfTheDay()
