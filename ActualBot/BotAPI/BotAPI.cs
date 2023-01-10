@@ -107,6 +107,7 @@ namespace ActualBot.BotAPI
             if (response.IsSuccessStatusCode)
             {
                 List<UserDTO> userDTO = JsonConvert.DeserializeObject<List<UserDTO>>(content);
+                userDTO.Reverse();
                 return userDTO;
             }
             else
@@ -121,6 +122,7 @@ namespace ActualBot.BotAPI
             if (response.IsSuccessStatusCode)
             {
                 List<UserDTO> userDTO = JsonConvert.DeserializeObject<List<UserDTO>>(content);
+                userDTO.Reverse();
                 return userDTO;
             }
             else
