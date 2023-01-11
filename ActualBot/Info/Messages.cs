@@ -22,8 +22,6 @@ namespace ActualBot.Info
                                 "Если ты вдруг захочешь выключить свой счетчик, ты можешь это сделать. Просто напиши /karmaSwitch ещё раз\n" +
                                 "Учти, что в таком случае, если у тебя была положительная карма, то она обнулится. А если отрицательная, то останется как есть.\n";
         public const string GamesOff = "Никто не выиграет, пока не начнёте играть... Для запуска игры напишите /gameOn";
-        public const string SecretSantaSticker = "CAACAgIAAxkBAAEaT7tjf-2UlQR748jqPTARgQABpHXVwKgAAmYSAAIrEOhJ3To7U-US8LYrBA";
-        public const string OfTheDaySticker = "CAACAgIAAxkBAAEGoTZjh_nzdC3bVYIfg5avIB8ghx70IwACNxUAAneYoUuKCzy_q8x4eCsE";
         public const string DontCheat = "Извини, но самому себе карму поменять не получится.";
         public const string NoChat = "Похоже, я еще не запомнил ваш чат. Напишите /start.";
         public const string NoUser = "Похоже, я еще не запомнил такого пользователя. Напиши /register.";

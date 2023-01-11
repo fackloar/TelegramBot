@@ -87,11 +87,12 @@ namespace TelegramBot.Bot
             await _botApi.UpdateChat(_chatId, chat);
             await _botApi.UpdateUser(chosenUser.Id, chosenUser);
 
-
+            var catStickerList = new CatStickers();
+            var randomSticker = RandomPickExtension.PickRandom(catStickerList.CatStickersList);
 
             Message sticker = await _botClient.SendStickerAsync(
                 chatId: _chatId,
-                sticker: Messages.OfTheDaySticker,
+                sticker: randomSticker,
                 cancellationToken: _cts);
 
             Message winner = await _botClient.SendTextMessageAsync(
