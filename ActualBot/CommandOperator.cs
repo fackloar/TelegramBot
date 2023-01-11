@@ -6,6 +6,7 @@ using ActualBot.Info;
 using System.Text;
 using System;
 using System.Runtime.InteropServices;
+using ActualBot.Extensions;
 
 namespace TelegramBot.Bot
 {
@@ -72,10 +73,10 @@ namespace TelegramBot.Bot
         private async Task OfTheDay()
         {
             var chat = await _botApi.GetChatByIdAsync(_chatId);
-            Random random = new Random();
             var users = await _botApi.GetUsersOfChatAsync(_chatId);
-            var choice = random.Next(0, users.Count());
-            var chosenUser = users[choice];
+
+            var chosenUser = RandomPickExtension.PickRandom(users);
+
             chosenUser.WinsNumber++;
             var name = UsernameOrFirstname(chosenUser);
             chat.Winner = name;
@@ -97,6 +98,11 @@ namespace TelegramBot.Bot
             chatId: _chatId,
             text: $"Котик дня: {name}",
             cancellationToken: _cts);
+        }
+
+        public async void RunOfTheDayManually()
+        {
+            await OfTheDay();
         }
 
         public async void WinnerCheck()
