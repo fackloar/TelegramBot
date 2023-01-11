@@ -179,6 +179,7 @@ namespace TelegramBot.Bot
                 if (user.KarmaSwitch == true)
                 {
                     user.Karma++;
+                    KarmaMilestoneMessage(user);
                     await _botApi.UpdateUser(user.Id, user);
                 }
                 else
@@ -200,6 +201,7 @@ namespace TelegramBot.Bot
                 if (user.KarmaSwitch == true)
                 {
                     user.Karma--;
+                    KarmaMilestoneMessage(user);
                     await _botApi.UpdateUser(user.Id, user);
                 }
                 else
@@ -213,6 +215,18 @@ namespace TelegramBot.Bot
             }
         }
 
+        private async void KarmaMilestoneMessage(UserDTO user)
+        {
+            var karmaMilestoneMessage = KarmaMilestoneChecker.Check(user.Karma);
+            if (karmaMilestoneMessage != null)
+            {
+                var username = UsernameOrFirstname(user);
+                Message achievement = await _botClient.SendTextMessageAsync(
+                chatId: _chatId,
+                text: $"{username}! {karmaMilestoneMessage}",
+                cancellationToken: _cts);
+            }
+        }
         public async Task KarmaSwitch(long userId)
         {
             var user = await _botApi.GetUserOfChatAsync(_chatId, userId);
@@ -259,12 +273,13 @@ namespace TelegramBot.Bot
         public async Task GetWinners()
         {
             var winners = await _botApi.GetTopWinners(_chatId);
+            var catEmoji = char.ConvertFromUtf32(0x1F63C);
             if (winners != null)
             {
                 var sb = new StringBuilder();
                 foreach (UserDTO winner in winners)
                 {
-                    sb.Append($"{UsernameOrFirstname(winner)} был(a) котиком {winner.WinsNumber} раз\n");
+                    sb.Append($"{UsernameOrFirstname(winner)} {catEmoji}: {winner.WinsNumber}\n");
                 }
                 var result = sb.ToString();
 
@@ -286,7 +301,8 @@ namespace TelegramBot.Bot
                 var sb = new StringBuilder();
                 foreach (UserDTO winner in winners)
                 {
-                    sb.Append($"У {UsernameOrFirstname(winner)} {winner.Karma} кармы\n");
+                    var karmaEmoji = KarmaEmojiSelector.EmojiString(winner.Karma);
+                    sb.Append($"{UsernameOrFirstname(winner)}: {winner.Karma} кармы {karmaEmoji}\n");
                 }
                 var result = sb.ToString();
 
