@@ -20,5 +20,6 @@ namespace ActualBot.BotAPI
         Task<UserDTO> GetUserOfChatAsync(long chatId, long userId);
         Task<List<UserDTO>> GetTopWinners(long chatId);
         Task<List<UserDTO>> GetTopKarma(long chatId);
+        Task<List<ChatDTO>> GetAllChats();
     }
 }

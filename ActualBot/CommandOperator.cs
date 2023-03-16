@@ -332,5 +332,26 @@ namespace TelegramBot.Bot
                     text: Messages.KarmaOff,
                     cancellationToken: _cts);
         }
+
+        public async Task SendCustomMessage()
+        {
+            var chats = _botApi.GetAllChats().Result;
+            var groupChats = new List<ChatDTO>();
+            foreach (ChatDTO chat in chats)
+            {
+                if (chat.Type != "Private")
+                {
+                    groupChats.Add(chat);
+                }
+            }
+
+            foreach (ChatDTO groupChat in groupChats)
+            {
+                Message announcment = await _botClient.SendTextMessageAsync(
+                chatId: groupChat.Id,
+                text: "Привет! Я немного обновился, но для того, чтобы я продолжал правильно работать, придется перезапустить игру. Пропишите /gameOn в чат!",
+                cancellationToken: _cts);
+            }
+        }
     }
 }

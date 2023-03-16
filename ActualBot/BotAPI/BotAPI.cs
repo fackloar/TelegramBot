@@ -1,4 +1,5 @@
 ﻿using ActualBot.Models;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -124,6 +125,21 @@ namespace ActualBot.BotAPI
                 List<UserDTO> userDTO = JsonConvert.DeserializeObject<List<UserDTO>>(content);
                 userDTO.Reverse();
                 return userDTO;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<ChatDTO>> GetAllChats()
+        {
+            var response = await _httpClient.GetAsync($"{_baseUrl}/Chat/");
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<ChatDTO> chatDTOs = JsonConvert.DeserializeObject<List<ChatDTO>>(content);
+                return chatDTOs;
             }
             else
             {
