@@ -10,8 +10,8 @@ using TelegramBot.DataLayer;
 namespace TelegramBotAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221202014731_Sqlite")]
-    partial class Sqlite
+    [Migration("20230329013005_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,9 @@ namespace TelegramBotAPI.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("KarmaSwitch")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Messages")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("TelegramId")

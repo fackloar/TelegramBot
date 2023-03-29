@@ -5,7 +5,7 @@
 namespace TelegramBotAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Sqlite : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,7 +38,8 @@ namespace TelegramBotAPI.Migrations
                     Username = table.Column<string>(type: "TEXT", nullable: true),
                     KarmaSwitch = table.Column<bool>(type: "INTEGER", nullable: false),
                     Karma = table.Column<int>(type: "INTEGER", nullable: false),
-                    WinsNumber = table.Column<int>(type: "INTEGER", nullable: false)
+                    WinsNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    Messages = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

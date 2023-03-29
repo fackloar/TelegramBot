@@ -28,5 +28,8 @@
 
         public const string GetKarma = "/karma";
         public const string GetKarmaAt = "/karma@kQoZclDuSi_bot";
+
+        public const string GetMessages = "/messages";
+        public const string GetMessagesAt = "/messages@kQoZclDuSi_bot";
     }
 }

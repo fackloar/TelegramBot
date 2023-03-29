@@ -57,6 +57,9 @@ namespace TelegramBotAPI.Migrations
                     b.Property<bool>("KarmaSwitch")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Messages")
+                        .HasColumnType("INTEGER");
+
                     b.Property<long>("TelegramId")
                         .HasColumnType("INTEGER");
 
