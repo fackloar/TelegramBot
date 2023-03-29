@@ -171,6 +171,13 @@ namespace TelegramBot.Bot
             return chat.GameOnSwitch;
         }
 
+        public async Task UpdateMessages(long chatId, long userId)
+        {
+            var user = await _botApi.GetUserOfChatAsync(chatId, userId);
+            user.Messages++;
+            await _botApi.UpdateUser(user.Id, user);
+        }
+
         public async Task KarmaUp(long userId)
         {
             var user = await _botApi.GetUserOfChatAsync(_chatId, userId);
@@ -307,6 +314,32 @@ namespace TelegramBot.Bot
                 var result = sb.ToString();
 
                 Message winnerList = await _botClient.SendTextMessageAsync(
+                    chatId: _chatId,
+                    text: result,
+                    cancellationToken: _cts);
+            }
+            else
+            {
+                await SendErrorMessage(Messages.NoChat);
+            }
+        }
+
+        public async Task GetMessages()
+        {
+            var users = await _botApi.GetUsersOfChatAsync(_chatId);
+            var textEmoji = char.ConvertFromUtf32(0x1F4AC);
+            if (users != null)
+            {
+                var sb = new StringBuilder();
+                List<UserDTO> sortedUsers = users.OrderBy(u => u.Messages).ToList();
+                sortedUsers.Reverse();
+                foreach (UserDTO user in sortedUsers)
+                {
+                    sb.Append($"{UsernameOrFirstname(user)} {textEmoji}: {user.Messages}\n");
+                }
+                var result = sb.ToString();
+
+                Message messagesList = await _botClient.SendTextMessageAsync(
                     chatId: _chatId,
                     text: result,
                     cancellationToken: _cts);

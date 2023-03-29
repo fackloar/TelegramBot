@@ -67,7 +67,9 @@ namespace ActualBot
             await _scheduler.ResumeAll();
 
             CommandOperator commandOperator = new CommandOperator(_botClient, cancellationToken, chatId, _botAPI, sender);
-            
+
+            await commandOperator.UpdateMessages(chatId, sender.Id);
+
             switch (message.Text)
             {
                 case Commands.Start:
@@ -135,6 +137,10 @@ namespace ActualBot
                 case Commands.GetKarma:
                 case Commands.GetKarmaAt:
                     await commandOperator.GetKarma();
+                    break;
+                case Commands.GetMessages:
+                case Commands.GetMessagesAt:
+                    await commandOperator.GetMessages();
                     break;
             }
         }

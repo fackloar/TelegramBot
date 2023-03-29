@@ -16,5 +16,6 @@ namespace ActualBot.Models
         public bool KarmaSwitch { get; set; }
         public int Karma { get; set; }
         public int WinsNumber { get; set; }
+        public int Messages { get; set; }
     }
 }

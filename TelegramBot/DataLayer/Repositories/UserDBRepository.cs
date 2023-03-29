@@ -99,6 +99,7 @@ namespace TelegramBot.DataLayer.Repositories
                     userToChange.WinsNumber = entity.WinsNumber;
                     userToChange.Karma = entity.Karma;
                     userToChange.KarmaSwitch = entity.KarmaSwitch;
+                    userToChange.Messages = entity.Messages;
                 }
                 _dataContext.Update(userToChange);
                 await _dataContext.SaveChangesAsync();
