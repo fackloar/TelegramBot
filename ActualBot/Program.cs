@@ -13,8 +13,6 @@ var botClient = new TelegramBotClient(token);
 StdSchedulerFactory factory = new StdSchedulerFactory();
 IScheduler scheduler = await factory.GetScheduler();
 
-await scheduler.Start();
-await scheduler.ResumeAll();
 
 
 var chatBot = new BotEngine(botClient, botApi, scheduler);
