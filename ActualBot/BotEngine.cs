@@ -67,8 +67,6 @@ namespace ActualBot
             await _scheduler.ResumeAll();
 
             CommandOperator commandOperator = new CommandOperator(_botClient, cancellationToken, chatId, _botAPI, sender);
-
-            Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
             
             switch (message.Text)
             {
