@@ -13,6 +13,7 @@ namespace TelegramBot.BusinessLayer.Interfaces
         Task Delete(int id);
         Task Update(int id, UserDTO entity);
         Task<UserDTO> GetById(int id);
+        Task UpdateMessages(int id);
 
     }
 }

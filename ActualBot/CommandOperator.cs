@@ -174,8 +174,7 @@ namespace TelegramBot.Bot
         public async Task UpdateMessages(long chatId, long userId)
         {
             var user = await _botApi.GetUserOfChatAsync(chatId, userId);
-            user.Messages++;
-            await _botApi.UpdateUser(user.Id, user);
+            await _botApi.UpdateUserMessage(user.Id);
         }
 
         public async Task KarmaUp(long userId)
@@ -219,6 +218,26 @@ namespace TelegramBot.Bot
             else
             {
                 await SendErrorMessage(Messages.NoUser);
+            }
+        }
+
+        public async Task<bool> KarmaChangeIsPossible(long userToChangeId, long userTryingToChangeId)
+        {
+            if (userToChangeId == userTryingToChangeId)
+            {
+                await CantManipulateYourKarma();
+                return false;
+            }
+            var userToChange = await _botApi.GetUserOfChatAsync(_chatId, userToChangeId);
+            var userTryingToChange = await _botApi.GetUserOfChatAsync(_chatId, userToChangeId);
+            if (userTryingToChange.KarmaSwitch == false)
+            {
+                await CantManipulateKarmaWithSwitchOff();
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
@@ -274,6 +293,14 @@ namespace TelegramBot.Bot
             Message dontCheat = await _botClient.SendTextMessageAsync(
             chatId: _chatId,
             text: Messages.DontCheat,
+            cancellationToken: _cts);
+        }
+
+        public async Task CantManipulateKarmaWithSwitchOff()
+        {
+            Message dontCheat = await _botClient.SendTextMessageAsync(
+            chatId: _chatId,
+            text: Messages.DontCheatKarmaSwitch,
             cancellationToken: _cts);
         }
 

@@ -119,5 +119,10 @@ namespace TelegramBot.BusinessLayer.Services
             var user = _mapper.Map<UserDTO>(result);
             return user;
         }
+
+        public async Task UpdateMessages(int id)
+        {
+            await _repository.UpdateMessages(id);
+        }
     }
 }

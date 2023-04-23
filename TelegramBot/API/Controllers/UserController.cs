@@ -79,6 +79,12 @@ namespace TelegramBot.API.Controllers
             return Ok();
         }
 
+        [HttpPut("{id}/messageUpdate")]
+        public async Task<IActionResult> UpdateMessages([FromRoute]int id)
+        {
+            await _userService.UpdateMessages(id);
+            return Ok();
+        }
         // POST: api/UserDTOes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

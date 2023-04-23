@@ -103,26 +103,18 @@ namespace ActualBot
                 case Commands.Plus:
                     if (message.ReplyToMessage != null)
                     {
-                        if (message.ReplyToMessage.From.Id != message.From.Id)
+                        if (await commandOperator.KarmaChangeIsPossible(message.ReplyToMessage.From.Id, message.From.Id) != false)
                         {
                             await commandOperator.KarmaUp(message.ReplyToMessage.From.Id);
-                        }
-                        else
-                        {
-                            await commandOperator.CantManipulateYourKarma();
                         }
                     }
                     break;
                 case Commands.Minus:
                     if (message.ReplyToMessage != null)
                     {
-                        if (message.ReplyToMessage.From.Id != message.From.Id)
+                        if (await commandOperator.KarmaChangeIsPossible(message.ReplyToMessage.From.Id, message.From.Id) != false)
                         {
                             await commandOperator.KarmaDown(message.ReplyToMessage.From.Id);
-                        }
-                        else
-                        {
-                            await commandOperator.CantManipulateYourKarma();
                         }
                     }
                     break;

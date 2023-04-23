@@ -27,5 +27,6 @@ namespace ActualBot.Info
         public const string NoUser = "Похоже, я еще не запомнил такого пользователя. Напиши /register.";
         public const string Error = "Что-то тут не так...";
         public const string KarmaOff = "У этого пользователя выключен счетчик кармы ;)";
+        public const string DontCheatKarmaSwitch = "Извини, но нельзя трогать чужую карму, если твой счетчик отключен ;)";
     }
 }

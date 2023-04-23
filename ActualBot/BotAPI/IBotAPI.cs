@@ -16,6 +16,7 @@ namespace ActualBot.BotAPI
         Task<HttpResponseMessage> CreateChatAsync(ChatDTO chat);
         Task<ChatDTO> GetChatByIdAsync(long id);
         Task<HttpResponseMessage> UpdateUser(int id, UserDTO user);
+        Task<HttpResponseMessage> UpdateUserMessage(int id);
         Task<HttpResponseMessage> UpdateChat(long id, ChatDTO chat);
         Task<UserDTO> GetUserOfChatAsync(long chatId, long userId);
         Task<List<UserDTO>> GetTopWinners(long chatId);

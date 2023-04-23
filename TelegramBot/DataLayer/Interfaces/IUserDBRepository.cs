@@ -12,5 +12,6 @@ namespace TelegramBot.DataLayer.Interfaces
         Task<UserDB> GetById(int id);
         Task Delete(int id);
         Task Update(int id, UserDB entity);
+        Task UpdateMessages(int id);
     }
 }

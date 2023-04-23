@@ -191,5 +191,19 @@ namespace TelegramBot.DataLayer.Repositories
                 return result;
             }
         }
+
+        public async Task UpdateMessages(int id)
+        {
+            using (_dataContext)
+            {
+                var userToChange = _dataContext.ChatUser.Find(id);
+                if (userToChange != null)
+                {
+                    userToChange.Messages++;
+                }
+                _dataContext.Update(userToChange);
+                await _dataContext.SaveChangesAsync();
+            }
+        }
     }
 }

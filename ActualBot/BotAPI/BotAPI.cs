@@ -93,6 +93,13 @@ namespace ActualBot.BotAPI
             return response;
         }
 
+        public async Task<HttpResponseMessage> UpdateUserMessage(int id)
+        {
+            var stringContent = new StringContent("messageUpdated");
+            var response = await _httpClient.PutAsync($"{_baseUrl}/User/{id}/messageUpdate", stringContent);
+            return response;
+        }
+
         public async Task<HttpResponseMessage> UpdateChat(long id, ChatDTO chat)
         {
             var json = JsonConvert.SerializeObject(chat);
